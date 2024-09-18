@@ -1,0 +1,15 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "**/*.csproj" ],
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src": "./Authentication.Credentials.Azure/"
+        }
+      ],
+      "dest": "./_DocFX/Authentication.Credentials.Azure/",
+      "shouldSkipMarkup": false
+    }
+  ]
+}
