@@ -24,7 +24,8 @@
 
 #region Imports
 
-using Azure.Core;
+using Microsoft.Identity.Web;
+using System.Security.Claims;
 
 #endregion
 
@@ -32,47 +33,43 @@ namespace Sidub.Platform.Authentication.Credentials
 {
 
     /// <summary>
-    /// Represents an service token credential.
+    /// Represents a web token credential.
     /// </summary>
-    public class ServiceTokenCredential : IClientCredential
+    public class WebTokenCredential : IClientCredential
     {
 
         #region Public properties
 
         /// <summary>
-        /// Gets the token credential.
+        /// Gets the claims principal associated with the user token credential.
         /// </summary>
-        public TokenCredential Credential { get; }
+        public ClaimsPrincipal ClaimsPrincipal { get; }
 
         /// <summary>
-        /// Gets the scopes for the token credential.
+        /// Gets the token acquisition service used to acquire tokens.
         /// </summary>
-        public string[] Scopes { get; }
+        public ITokenAcquisition TokenAcquisition { get; }
+
+        /// <summary>
+        /// Gets the scope of the token.
+        /// </summary>
+        public string Scope { get; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceTokenCredential"/> class with the specified token credential and scope.
+        /// Initializes a new instance of the <see cref="WebTokenCredential"/> class.
         /// </summary>
-        /// <param name="credential">The token credential.</param>
-        /// <param name="scope">The scope for the token credential.</param>
-        public ServiceTokenCredential(TokenCredential credential, string scope)
+        /// <param name="claimsPrincipal">The claims principal associated with the user token credential.</param>
+        /// <param name="tokenAcquisition">The token acquisition service used to acquire tokens.</param>
+        /// <param name="scope">The scope of the token.</param>
+        public WebTokenCredential(ClaimsPrincipal claimsPrincipal, ITokenAcquisition tokenAcquisition, string scope)
         {
-            Credential = credential;
-            Scopes = new[] { scope };
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceTokenCredential"/> class with the specified token credential and scopes.
-        /// </summary>
-        /// <param name="credential">The token credential.</param>
-        /// <param name="scopes">The scopes for the token credential.</param>
-        public ServiceTokenCredential(TokenCredential credential, string[] scopes)
-        {
-            Credential = credential;
-            Scopes = scopes;
+            ClaimsPrincipal = claimsPrincipal;
+            TokenAcquisition = tokenAcquisition;
+            Scope = scope;
         }
 
         #endregion

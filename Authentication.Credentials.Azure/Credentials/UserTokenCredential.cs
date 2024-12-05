@@ -24,8 +24,7 @@
 
 #region Imports
 
-using Microsoft.Identity.Web;
-using System.Security.Claims;
+using Azure.Core;
 
 #endregion
 
@@ -41,35 +40,62 @@ namespace Sidub.Platform.Authentication.Credentials
         #region Public properties
 
         /// <summary>
-        /// Gets the claims principal associated with the user token credential.
+        /// Gets the token credential.
         /// </summary>
-        public ClaimsPrincipal ClaimsPrincipal { get; }
+        public TokenCredential Credential { get; }
 
         /// <summary>
-        /// Gets the token acquisition service used to acquire tokens.
+        /// Gets the client ID.
         /// </summary>
-        public ITokenAcquisition TokenAcquisition { get; }
+        public Guid ClientId { get; }
 
         /// <summary>
-        /// Gets the scope of the token.
+        /// Gets the tenant ID.
         /// </summary>
-        public string Scope { get; }
+        public Guid TenantId { get; }
+
+        /// <summary>
+        /// Gets the redirect URI.
+        /// </summary>
+        public string RedirectUri { get; }
+
+        /// <summary>
+        /// Gets the scopes for the token credential.
+        /// </summary>
+        public string[] Scopes { get; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserTokenCredential"/> class.
+        /// Initializes a new instance of the <see cref="UserTokenCredential"/> class with the specified token credential and scope.
         /// </summary>
-        /// <param name="claimsPrincipal">The claims principal associated with the user token credential.</param>
-        /// <param name="tokenAcquisition">The token acquisition service used to acquire tokens.</param>
-        /// <param name="scope">The scope of the token.</param>
-        public UserTokenCredential(ClaimsPrincipal claimsPrincipal, ITokenAcquisition tokenAcquisition, string scope)
+        /// <param name="credential">The token credential.</param>
+        /// <param name="scope">The scope for the token credential.</param>
+        /// <param name="redirectUri">The redirect URI for the authentication flow.</param>
+        public UserTokenCredential(TokenCredential credential, string scope, Guid clientId, Guid tenantId, string redirectUri)
         {
-            ClaimsPrincipal = claimsPrincipal;
-            TokenAcquisition = tokenAcquisition;
-            Scope = scope;
+            Credential = credential;
+            Scopes = new[] { scope };
+            ClientId = clientId;
+            TenantId = tenantId;
+            RedirectUri = redirectUri;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserTokenCredential"/> class with the specified token credential and scopes.
+        /// </summary>
+        /// <param name="credential">The token credential.</param>
+        /// <param name="scopes">The scopes for the token credential.</param>
+        /// <param name="redirectUri">The redirect URI for the authentication flow.</param>
+        public UserTokenCredential(TokenCredential credential, string[] scopes, Guid clientId, Guid tenantId, string redirectUri)
+        {
+            Credential = credential;
+            Scopes = scopes;
+            ClientId = clientId;
+            TenantId = tenantId;
+            RedirectUri = redirectUri;
         }
 
         #endregion
